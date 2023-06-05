@@ -1,10 +1,11 @@
+
+// The Rest Controller class - ProductServiceController.java
+package com.example.app.controller;
+
 import com.example.app.model.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,15 +25,32 @@ public class ProductServiceController {
         almond.setName("Almond");
         productRepo.put(almond.getId(), almond);
     }
-
+    // lister tous les produits existante
     @RequestMapping(value = "/products")
     public ResponseEntity<Object> getProduct() {
         return new ResponseEntity<>(productRepo.values(), HttpStatus.OK);
     }
 
+    // Creation d'un nouveau Produit
     @RequestMapping(value = "/products", method = RequestMethod.POST)
     public ResponseEntity<Object> createProduct(@RequestBody Product product) {
         productRepo.put(product.getId(), product);
         return new ResponseEntity<>("Product is created successfully", HttpStatus.CREATED);
+    }
+
+    // Modification d'un produit existant
+    @RequestMapping(value = "/products/{id}",method = RequestMethod.PUT)
+    public ResponseEntity<Object> updateProduct(@PathVariable("id") String id,@RequestBody Product product)
+    {
+        productRepo.remove(id);
+        product.setId(id);
+        productRepo.put(id,product);
+        return new ResponseEntity<>("Product is updated successfully",HttpStatus.OK);
+    }
+    // suppression d'un produit existant
+    @RequestMapping(value = "/products/{id}",method = RequestMethod.DELETE)
+    public ResponseEntity<Object> delete(@PathVariable("id") String id){
+        productRepo.remove(id);
+        return new ResponseEntity<>("Product is deleted successfully",HttpStatus.NO_CONTENT);
     }
 }

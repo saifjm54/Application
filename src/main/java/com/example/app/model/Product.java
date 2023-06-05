@@ -1,5 +1,6 @@
 package com.example.app.model;
 
+// The POJO class - Product.java
 public class Product {
     private String id;
     private String name;
